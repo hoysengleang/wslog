@@ -1,6 +1,6 @@
 # wslog
 
-[![npm](https://img.shields.io/npm/v/wslog-cli)](https://www.npmjs.com/package/wslog-cli) [![CI](https://github.com/hoysengleang/wslog/actions/workflows/ci.yml/badge.svg)](https://github.com/hoysengleang/wslog/actions/workflows/ci.yml) [![license](https://img.shields.io/npm/l/wslog-cli)](LICENSE)
+[![npm](https://img.shields.io/npm/v/wslog-proxy)](https://www.npmjs.com/package/wslog-proxy) [![CI](https://github.com/hoysengleang/wslog/actions/workflows/ci.yml/badge.svg)](https://github.com/hoysengleang/wslog/actions/workflows/ci.yml) [![license](https://img.shields.io/npm/l/wslog-proxy)](LICENSE)
 
 **Point your app at wslog, open the browser, watch every WebSocket message. No code changes.**
 
@@ -9,8 +9,8 @@ wslog is an open-source proxy that sits between your client and your WebSocket s
 <!-- TODO: demo GIF + screenshot -->
 
 ```bash
-npx wslog-cli            # dashboard at http://localhost:4000
-npx wslog-cli --demo     # same, plus a fake chat server so you can try it
+npx wslog-proxy          # dashboard at http://localhost:4000
+npx wslog-proxy --demo   # same, plus a fake chat server so you can try it
 ```
 
 1. Open `http://localhost:4000`.
@@ -39,8 +39,8 @@ Path and query are passed through: `ws://127.0.0.1:4000/p/3f9a1c2b/chat?room=1` 
 ## Install
 
 ```bash
-npx wslog-cli                                # no install
-npm i -g wslog-cli && wslog                  # global; the command is `wslog`
+npx wslog-proxy                              # no install
+npm i -g wslog-proxy && wslog                # global; the command is `wslog`
 docker run -p 4000:4000 ghcr.io/hoysengleang/wslog  # Docker
 ```
 

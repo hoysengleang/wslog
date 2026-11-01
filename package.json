@@ -1,5 +1,5 @@
 {
-  "name": "wslog-cli",
+  "name": "wslog-proxy",
   "version": "0.1.0",
   "description": "Record any WebSocket traffic and watch it live in a browser dashboard. No code changes.",
   "keywords": [

@@ -61,7 +61,7 @@ Rules of thumb:
 ### Plugins
 
 ```ts
-import { createWslog, definePlugin } from 'wslog-cli';
+import { createWslog, definePlugin } from 'wslog-proxy';
 
 const dropHeartbeats = definePlugin({
   name: 'drop-heartbeats',
@@ -86,7 +86,7 @@ await wslog.listen();
 Implement `MessageStore` (`src/server/storage/types.ts`) and register it:
 
 ```ts
-import { registerStore } from 'wslog-cli';
+import { registerStore } from 'wslog-proxy';
 registerStore('redis', async (path, { maxMessages }) => new RedisStore(path, maxMessages));
 // wslog --store redis:localhost:6379
 ```
