@@ -6,7 +6,7 @@
 
 wslog is an open-source proxy that sits between your client and your WebSocket server, records every message, and streams it live to a browser dashboard.
 
-<!-- TODO: demo GIF + screenshot -->
+![wslog demo: live WebSocket traffic, a masked token, and search](https://raw.githubusercontent.com/hoysengleang/wslog/main/docs/demo.gif)
 
 ```bash
 npx wslog-proxy          # dashboard at http://localhost:4000
