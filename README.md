@@ -1,5 +1,7 @@
 # wslog
 
+[![npm](https://img.shields.io/npm/v/wslog-cli)](https://www.npmjs.com/package/wslog-cli) [![CI](https://github.com/hoysengleang/wslog/actions/workflows/ci.yml/badge.svg)](https://github.com/hoysengleang/wslog/actions/workflows/ci.yml) [![license](https://img.shields.io/npm/l/wslog-cli)](LICENSE)
+
 **Point your app at wslog, open the browser, watch every WebSocket message. No code changes.**
 
 wslog is an open-source proxy that sits between your client and your WebSocket server, records every message, and streams it live to a browser dashboard.
@@ -39,7 +41,7 @@ Path and query are passed through: `ws://127.0.0.1:4000/p/3f9a1c2b/chat?room=1` 
 ```bash
 npx wslog-cli                                # no install
 npm i -g wslog-cli && wslog                  # global; the command is `wslog`
-docker run -p 4000:4000 ghcr.io/<you>/wslog  # Docker
+docker run -p 4000:4000 ghcr.io/hoysengleang/wslog  # Docker
 ```
 
 Requires Node.js 22 or newer.
