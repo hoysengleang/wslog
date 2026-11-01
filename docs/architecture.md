@@ -106,6 +106,6 @@ await wslog.close();
 
 - Replay or edit-and-resend a message
 - Inject latency or drop frames for chaos testing
-- Persist connections and targets, not only messages
+- Persist connections, not only messages and targets
 - `wss://` termination with self-signed certs (`--insecure` upstream)
 - Per-target masking rules and payload decoders (protobuf, msgpack)

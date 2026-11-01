@@ -59,12 +59,13 @@ In Docker, `localhost` means the container. Use `ws://host.docker.internal:8080`
 | `-m, --mask` | `WSLOG_MASK` | none | Field names to hide, e.g. `token,password` |
 | `--max-messages` | `WSLOG_MAX_MESSAGES` | `10000` | Storage limit; oldest dropped first |
 | `--max-payload` | – | `1048576` | Bytes kept per message; longer payloads are truncated (still forwarded in full) |
-| `--store` | `WSLOG_STORE` | `memory` | `memory`, `./traffic.jsonl`, or `./traffic.db` (SQLite) |
+| `--store` | `WSLOG_STORE` | `memory` | `memory`, `./traffic.jsonl`, or `./traffic.db` (SQLite, needs Node.js 22.13+) |
 | `--share-token` | `WSLOG_SHARE_TOKEN` | random | Token for the read-only share link |
 | `--admin-token` | `WSLOG_ADMIN_TOKEN` | random | Token for full access from other machines |
 | – | `WSLOG_TARGETS_FILE` | `~/.config/wslog/targets.json` | Where targets are remembered between runs. Set it empty to keep them in memory only |
 | `--demo` | – | off | Start a fake chat server (also masks `token`, `password`) |
 | `-o, --open` | – | off | Open the dashboard in your browser |
+| `--verbose` / `-q, --quiet` | – | – | Debug logging / errors only |
 
 Memory: the `memory` and `.jsonl` stores keep messages in RAM, up to `--max-messages` × `--max-payload` bytes in the worst case (about 10 GB with the defaults if every message were 1 MB). For heavy traffic, lower `--max-payload` or use a `.db` (SQLite) store.
 
@@ -74,9 +75,14 @@ WebSocket traffic often carries tokens and personal data, so wslog is safe by de
 
 - It listens on `127.0.0.1` only. Requests from this machine get full access; anything else needs a token.
 - **Masking happens before storage.** Masked values never reach disk, the dashboard, or exports. JSON is masked at any depth, including JSON encoded inside strings; other text by `key=value` / `"key": "value"` patterns (escaped or not), and URLs by query parameter, including target URLs. Binary frames that contain UTF-8 text are masked the same way. Passwords in URLs (`ws://user:pass@host`) are always hidden.
+- Handshake headers (cookies, `Authorization`) are forwarded to your server but never stored or shown. Only the `User-Agent` is recorded.
+- Saved traffic (`.jsonl`, `.db`) and the targets file are readable only by your user. Fields you did not mask are stored as sent, so treat these files like logs that contain secrets.
 - Share links are read-only and need the share token.
+- When wslog listens beyond localhost (including in Docker), it prints the admin link in its logs. Anyone who can read those logs gets full access, so keep them private or set your own `--admin-token`.
 - The dashboard API rejects cross-origin requests, including `Origin: null` (sandboxed iframes, local HTML files). Access without a token needs a local `Host` name, so DNS rebinding cannot reach it. Other sites cannot frame the dashboard.
 - **v0.1 has no user accounts. Do not expose wslog to the internet.**
+
+Found a vulnerability? Please report it privately; see [SECURITY.md](SECURITY.md).
 
 ## How it compares
 

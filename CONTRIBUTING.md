@@ -4,8 +4,10 @@ Thanks for helping! Small, focused pull requests are easiest to review.
 
 ## Setup
 
+Fork the repository on GitHub, then:
+
 ```bash
-git clone https://github.com/<you>/wslog && cd wslog
+git clone https://github.com/<your-username>/wslog && cd wslog
 npm install
 npm run dev
 ```
@@ -29,6 +31,10 @@ Read [docs/architecture.md](docs/architecture.md) for how the pieces fit togethe
 ## Good first issues
 
 Look for the `good first issue` label. If you want to work on something bigger, open an issue first so we can agree on the approach.
+
+## Security issues
+
+Please do not open a public issue for a vulnerability. See [SECURITY.md](SECURITY.md).
 
 ## Code of conduct
 

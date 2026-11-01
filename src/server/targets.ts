@@ -4,6 +4,7 @@ import { connect } from 'node:net';
 import { dirname } from 'node:path';
 import { PROXY_PREFIX, type TargetInfo } from '../shared/protocol.js';
 import type { EventBus } from './events.js';
+import { ensurePrivateFile } from './paths.js';
 import type { Logger } from './util/logger.js';
 
 export class TargetError extends Error {}
@@ -97,13 +98,15 @@ export function probeTarget(url: string, timeoutMs = 1500): Promise<string | und
 export function persistTargets(registry: TargetRegistry, bus: EventBus, file: string, logger: Logger): void {
   try {
     const saved = JSON.parse(readFileSync(file, 'utf8')) as { targets?: unknown };
-    for (const url of Array.isArray(saved.targets) ? saved.targets : []) {
+    const urls: unknown[] = Array.isArray(saved.targets) ? saved.targets : [];
+    urls.forEach((url, i) => {
       try {
         if (typeof url === 'string') registry.add(url);
-      } catch (err) {
-        logger.error(`Skipping saved target ${String(url)}: ${(err as Error).message}`);
+      } catch {
+        // Not the URL itself: it may carry credentials.
+        logger.error(`Skipping saved target #${i + 1} in ${file}: not a valid ws:// or wss:// URL`);
       }
-    }
+    });
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code !== 'ENOENT') logger.error(`Could not read saved targets from ${file}: ${(err as Error).message}`);
   }
@@ -112,7 +115,8 @@ export function persistTargets(registry: TargetRegistry, bus: EventBus, file: st
     const urls = targets.filter((t) => !t.demo).map((t) => t.url);
     try {
       mkdirSync(dirname(file), { recursive: true });
-      writeFileSync(file, `${JSON.stringify({ targets: urls }, null, 2)}\n`, { mode: 0o600 });
+      ensurePrivateFile(file);
+      writeFileSync(file, `${JSON.stringify({ targets: urls }, null, 2)}\n`);
     } catch (err) {
       logger.error(`Could not save targets to ${file}: ${(err as Error).message}`);
     }

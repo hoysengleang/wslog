@@ -6,6 +6,6 @@ In short: be respectful and welcoming, assume good intent, give and accept const
 
 ## Reporting
 
-Report unacceptable behavior to the maintainers at <!-- TODO: contact email -->. All reports are reviewed promptly and kept confidential.
+Report unacceptable behavior to the maintainers at [hoysengleang617@gmail.com](mailto:hoysengleang617@gmail.com). All reports are reviewed promptly and kept confidential.
 
 Maintainers may remove, edit, or reject comments, commits, code, issues, and other contributions that do not follow this code of conduct, and may ban contributors temporarily or permanently.

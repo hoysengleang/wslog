@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
@@ -77,6 +77,20 @@ describe('persistent stores', () => {
     await store.close();
     const lines = readFileSync(path, 'utf8').trim().split('\n');
     expect(lines.length).toBeLessThanOrEqual(4);
+  });
+
+  it.each(['jsonl', 'db'])('keeps traffic files private, even ones that already existed (%s)', async (ext) => {
+    const fresh = join(dir, `private.${ext}`);
+    const existing = join(dir, `existing.${ext}`);
+    writeFileSync(existing, '', { mode: 0o644 });
+    for (const path of [fresh, existing]) {
+      const store = await createStore(path, { maxMessages: 2 });
+      for (let i = 1; i <= 5; i++) store.append(record(i)); // JSONL compacts into a new file
+      await store.close();
+      for (const file of [path, `${path}-wal`, `${path}-shm`].filter(existsSync)) {
+        expect(statSync(file).mode & 0o777, file).toBe(0o600);
+      }
+    }
   });
 });
 

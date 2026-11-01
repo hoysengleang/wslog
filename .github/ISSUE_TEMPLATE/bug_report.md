@@ -4,6 +4,8 @@ about: Something does not work as expected
 labels: bug
 ---
 
+<!-- Before pasting logs, payloads, or URLs: remove tokens, cookies, passwords, and the ?token= part of wslog links. Report security problems privately (see SECURITY.md), not here. -->
+
 **What happened**
 
 **What you expected**

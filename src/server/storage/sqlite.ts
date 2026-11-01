@@ -1,6 +1,7 @@
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import type { Direction, MessageRecord, PayloadKind } from '../../shared/protocol.js';
+import { ensurePrivateFile } from '../paths.js';
 import type { MessageQuery, MessageStore, StoreOptions } from './types.js';
 
 // Minimal structural types for `node:sqlite` so we compile on Node versions
@@ -77,6 +78,8 @@ export class SqliteStore implements MessageStore {
       throw new Error(`SQLite storage needs Node.js 22.13 or newer (running ${process.version}). Use a .jsonl file instead.`);
     }
     mkdirSync(dirname(path), { recursive: true });
+    // Before SQLite opens it: the -wal and -shm files copy the database's permissions.
+    ensurePrivateFile(path);
     return new SqliteStore(new sqlite.DatabaseSync(path), path, options);
   }
 

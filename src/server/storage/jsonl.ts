@@ -2,6 +2,7 @@ import { closeSync, createReadStream, existsSync, mkdirSync, openSync, renameSyn
 import { dirname } from 'node:path';
 import { createInterface } from 'node:readline';
 import type { MessageRecord } from '../../shared/protocol.js';
+import { ensurePrivateFile } from '../paths.js';
 import { MemoryStore } from './memory.js';
 import type { MessageQuery, MessageStore, StoreOptions } from './types.js';
 
@@ -34,6 +35,7 @@ export class JsonlStore implements MessageStore {
 
   private async load(): Promise<void> {
     mkdirSync(dirname(this.path), { recursive: true });
+    ensurePrivateFile(this.path);
     if (existsSync(this.path)) {
       const lines = createInterface({ input: createReadStream(this.path, 'utf8'), crlfDelay: Infinity });
       for await (const line of lines) {
@@ -103,7 +105,8 @@ export class JsonlStore implements MessageStore {
     this.pending = [];
     if (this.fd !== -1) closeSync(this.fd);
     const tmp = `${this.path}.tmp`;
-    writeFileSync(tmp, records.map((r) => `${JSON.stringify(r)}\n`).join(''));
+    writeFileSync(tmp, records.map((r) => `${JSON.stringify(r)}\n`).join(''), { mode: 0o600 });
+    ensurePrivateFile(tmp);
     renameSync(tmp, this.path);
     this.linesInFile = records.length;
     this.fd = openSync(this.path, 'a');
